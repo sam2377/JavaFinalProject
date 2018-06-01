@@ -22,8 +22,7 @@ public class LogInPage extends JFrame implements ActionListener {
 
 	private String id;
 
-	
-	//srfgsdfgdfg
+	// master commit
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
