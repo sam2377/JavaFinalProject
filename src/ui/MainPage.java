@@ -37,6 +37,7 @@ public class MainPage extends JFrame implements ActionListener{
 		setTitle("Main");
 		
 		my_friend = new JTextArea("¦n¤Í:\n");
+		my_friend.setEditable(false);
 		for(int i=0;i<friendlist.size();i++) {
 			my_friend.append(friendlist.get(i) + "\n");
 		}

@@ -15,6 +15,8 @@ import client_Test.Record;
 
 public class ChatClient extends Thread {
 
+	final private String Server_Ip = "140.116.111.113";
+	
 	private String id;
 	private BufferedReader br = null;
 	private PrintWriter pw = null;
@@ -27,7 +29,7 @@ public class ChatClient extends Thread {
 
 	public ChatClient() {
 		try {
-			socket = new Socket("140.116.111.113", 5050);
+			socket = new Socket(Server_Ip, 5050);
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 			pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 		} catch (Exception e) {
@@ -55,7 +57,7 @@ public class ChatClient extends Thread {
 	public void reconnect() {
 		System.out.println("reconnect");
 		try {
-			socket = new Socket("140.116.111.113", 5050);
+			socket = new Socket(Server_Ip, 5050);
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 			pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 		} catch (Exception e) {
