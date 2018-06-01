@@ -22,8 +22,6 @@ public class LogInPage extends JFrame implements ActionListener {
 
 	private String id;
 	
-	//rflogjdfijhgbifgdjhiojoi
-	
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
