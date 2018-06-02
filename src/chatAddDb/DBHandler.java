@@ -112,7 +112,7 @@ public class DBHandler {
 	
 	public boolean addFriend(String user, String friend) {
 		boolean result = false;
-		if(confirmAccount(user) && confirmAccount(friend) && !isFriend(user, friend)) {
+		if(confirmAccount(user) && confirmAccount(friend) && !isFriend(user, friend) && !user.equals(friend)) {
 			try {
 				PreparedStatement statement = conn.prepareStatement("INSERT INTO friendMap(user,friend) VALUES(?,?)");
 				statement.setString(1, user);

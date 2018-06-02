@@ -15,6 +15,7 @@ import javax.swing.SwingWorker;
 public class LogInPage extends JFrame implements ActionListener {
 
 	static LogInPage logInPage;
+	static MainPage mainPage;
 	static ChatClient chatClient = null;
 
 	private JTextField username = null;
@@ -76,8 +77,7 @@ public class LogInPage extends JFrame implements ActionListener {
 
 			protected void done() {
 				id = chatClient.getUserId();
-				MainPage mainPage = new MainPage(chatClient.getFriendlist(), chatClient.getChatroom(),
-						chatClient.getRecord());
+				mainPage = new MainPage();
 				mainPage.setVisible(true);
 				setVisible(false);
 			}

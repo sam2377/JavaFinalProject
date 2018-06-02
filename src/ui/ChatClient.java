@@ -21,9 +21,9 @@ public class ChatClient extends Thread {
 	private BufferedReader br = null;
 	private PrintWriter pw = null;
 	private Socket socket = null;
-	private ArrayList<String> friendlist = new ArrayList<String>();
-	private ArrayList<Chatroom> chatroom = new ArrayList<Chatroom>();
-	private ArrayList<Record> record = new ArrayList<Record>();
+	static ArrayList<String> friendlist = new ArrayList<String>();
+	static ArrayList<Chatroom> chatroom = new ArrayList<Chatroom>();
+	static ArrayList<Record> record = new ArrayList<Record>();
 
 	private volatile int state = 0;
 
@@ -117,7 +117,7 @@ public class ChatClient extends Thread {
 							msg = msg.replace(Identifier.RecordData, "");
 							String[] split_line = msg.split(",");
 							record.add(new Record(split_line[0], split_line[1]));
-						} else if (msg.contains(Identifier.StateThree)) {
+						} else if (msg.contains(Identifier.StateTwo)) {
 							state = 2;
 						}
 					}
@@ -126,6 +126,21 @@ public class ChatClient extends Thread {
 				}
 				break;
 			case 2:
+				try {
+					if (br.ready()) {
+						msg = br.readLine();
+						if(msg.contains(Identifier.AddFriendS)) {
+							JOptionPane.showMessageDialog(LogInPage.mainPage, "加入好友成功");
+							msg = msg.replace(Identifier.AddFriendS, "");
+							friendlist.add(msg);
+							LogInPage.mainPage.refresh();
+						}else if(msg.contains(Identifier.AddFriendF)) {
+							JOptionPane.showMessageDialog(LogInPage.mainPage, "加入好友失敗");
+						}
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
 				break;
 			case 3:
 				break;
@@ -142,15 +157,4 @@ public class ChatClient extends Thread {
 		return id;
 	}
 
-	public ArrayList<String> getFriendlist() {
-		return friendlist;
-	}
-
-	public ArrayList<Chatroom> getChatroom() {
-		return chatroom;
-	}
-
-	public ArrayList<Record> getRecord() {
-		return record;
-	}
 }
