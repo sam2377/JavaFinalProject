@@ -15,7 +15,7 @@ import client_Test.Record;
 
 public class ChatClient extends Thread {
 
-	final private String Server_Ip = "140.116.111.113";
+	final private String Server_Ip = "192.168.1.148";
 	
 	private String id;
 	private BufferedReader br = null;
@@ -80,15 +80,15 @@ public class ChatClient extends Thread {
 					if (br.ready()) {
 						msg = br.readLine();
 						if (msg.equals(Identifier.CreateAccountF)) {
-							JOptionPane.showMessageDialog(LogInPage.logInPage, "±b¸¹¤w¦s¦b");
+							JOptionPane.showMessageDialog(LogInPage.logInPage, "å¸³è™Ÿå·²å­˜åœ¨");
 						} else if (msg.equals(Identifier.CreateAccountS)) {
-							JOptionPane.showMessageDialog(LogInPage.logInPage, "±b¸¹«Ø¥ß¦¨¥\");
+							JOptionPane.showMessageDialog(LogInPage.logInPage, "å¸³è™Ÿå»ºç«‹æˆåŠŸ");
 						} else if (msg.equals(Identifier.LoginFailure)) {
 //							System.out.println("LoginFailure");
-							JOptionPane.showMessageDialog(LogInPage.logInPage, "µn¤J¥¢±Ñ");
+							JOptionPane.showMessageDialog(LogInPage.logInPage, "ç™»å…¥å¤±æ•—");
 						} else if (msg.equals(Identifier.LoginSuccess)) {
 //							System.out.println("LoginSuccess");
-							JOptionPane.showMessageDialog(LogInPage.logInPage, "µn¤J¦¨¥\");
+							JOptionPane.showMessageDialog(LogInPage.logInPage, "ç™»å…¥æˆåŠŸ");
 							sendMsg(Identifier.ID);
 							state = 1;
 						}
