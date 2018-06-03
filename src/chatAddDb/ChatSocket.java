@@ -84,7 +84,14 @@ public class ChatSocket extends Thread {
 					for (int i = 0; i < record.size(); i++) {
 						outprint(Identifier.RecordData + record.get(i).sender + "," + record.get(i).MSG);
 					}
-					outprint(Identifier.StateThree);
+					outprint(Identifier.StateTwo);
+				} else if(msg.contains(Identifier.AddFriend)){
+					msg = msg.replace(Identifier.AddFriend, "");
+					if(dbHandler.addFriend(id, msg)) {
+						outprint(Identifier.AddFriendS + msg);
+					}else {
+						outprint(Identifier.AddFriendF);
+					}
 				} else {
 					ServerListener.chatManager.Sendmessage(this, id + ": " + msg);
 				}

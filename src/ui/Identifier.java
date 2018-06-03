@@ -12,5 +12,8 @@ public class Identifier {
 	final static String FriendData = "\tFriendData";
 	final static String ChatroomData = "\tChatroomData";
 	final static String RecordData = "\tRecordData";
-	final static String StateThree = "\tStateThree";
+	final static String StateTwo = "\tStateTwo";
+	final static String AddFriend = "\tAddfriend";
+	final static String AddFriendS = "\tAddfriendS";
+	final static String AddFriendF = "\tAddfriendF";
 }
