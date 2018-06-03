@@ -2,6 +2,8 @@ package ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.lang.model.type.NullType;
 import javax.swing.JButton;
@@ -53,6 +55,23 @@ public class LogInPage extends JFrame implements ActionListener {
 		password.setLocation(300, 250);
 		password.setSize(200, 50);
 		add(password);
+		
+		username.addFocusListener(new FocusListener() {
+			public void focusLost(FocusEvent e) {
+
+			}
+			public void focusGained(FocusEvent e) {
+				username.setText("");
+			}
+		});
+		password.addFocusListener(new FocusListener() {
+			public void focusLost(FocusEvent e) {
+	
+			}
+			public void focusGained(FocusEvent e) {
+				password.setText("");
+			}
+		});
 
 		logIn = new JButton("Log In");
 		logIn.setLocation(350, 300);
@@ -92,7 +111,7 @@ public class LogInPage extends JFrame implements ActionListener {
 				chatClient.sendMsg(
 						Identifier.CheckAccount + username.getText().toString() + "," + password.getText().toString());
 			}else {
-				JOptionPane.showMessageDialog(LogInPage.logInPage, "Äæ¦ì¤£¯à¬°ªÅ");
+				JOptionPane.showMessageDialog(LogInPage.logInPage, "ï¿½ï¿½ì¤£ï¿½à¬°ï¿½ï¿½");
 			}
 		}
 		if (e.getSource() == signUp) {
@@ -103,7 +122,7 @@ public class LogInPage extends JFrame implements ActionListener {
 				chatClient.sendMsg(
 						Identifier.CreateAccount + username.getText().toString() + "," + password.getText().toString());
 			}else {
-				JOptionPane.showMessageDialog(LogInPage.logInPage, "Äæ¦ì¤£¯à¬°ªÅ");
+				JOptionPane.showMessageDialog(LogInPage.logInPage, "ï¿½ï¿½ì¤£ï¿½à¬°ï¿½ï¿½");
 			}
 		}
 

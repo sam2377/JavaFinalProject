@@ -15,7 +15,7 @@ import client_Test.Record;
 
 public class ChatClient extends Thread {
 
-	final private String Server_Ip = "192.168.1.148";
+	final private String Server_Ip = "192.168.0.104";
 	
 	private String id;
 	private BufferedReader br = null;

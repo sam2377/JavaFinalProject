@@ -22,7 +22,7 @@ public class ChatClient extends Thread {
 
 	public ChatClient() {
 		try {
-			socket = new Socket("192.168.1.148", 5050);
+			socket = new Socket("192.168.0.104", 5050);
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 			pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 		} catch (Exception e) {
@@ -50,7 +50,7 @@ public class ChatClient extends Thread {
 	public void reconnect() {
 		System.out.println("reconnect");
 		try {
-			socket = new Socket("192.168.1.148", 5050);
+			socket = new Socket("192.168.0.104", 5050);
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 			pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 		} catch (Exception e) {
