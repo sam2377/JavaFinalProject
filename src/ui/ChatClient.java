@@ -130,12 +130,12 @@ public class ChatClient extends Thread {
 					if (br.ready()) {
 						msg = br.readLine();
 						if(msg.contains(Identifier.AddFriendS)) {
-							JOptionPane.showMessageDialog(LogInPage.mainPage, "¥[¤J¦n¤Í¦¨¥\");
+							JOptionPane.showMessageDialog(LogInPage.mainPage, "åŠ å…¥å¥½å‹æˆåŠŸ");
 							msg = msg.replace(Identifier.AddFriendS, "");
 							friendlist.add(msg);
 							LogInPage.mainPage.refresh();
 						}else if(msg.contains(Identifier.AddFriendF)) {
-							JOptionPane.showMessageDialog(LogInPage.mainPage, "¥[¤J¦n¤Í¥¢±Ñ");
+							JOptionPane.showMessageDialog(LogInPage.mainPage, "åŠ å…¥å¥½å‹å¤±æ•—");
 						}
 					}
 				} catch (Exception e) {
