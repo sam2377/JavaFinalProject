@@ -120,8 +120,8 @@ public class MainPage extends JFrame implements ActionListener {
 	
 	
 	public void refresh() {
-//		my_friend.append(ChatClient.friendlist.get(ChatClient.friendlist.size()-1) + "\n");
 		fList.addElement(ChatClient.friendlist.get(ChatClient.friendlist.size()-1));
+		rList.addElement(ChatClient.friendlist.get(ChatClient.friendlist.size()-1));
 	}
 
 
@@ -139,6 +139,7 @@ public class MainPage extends JFrame implements ActionListener {
 		if (e.getSource() == addFriend) {
 			if (!textin.getText().equals("")) {
 				LogInPage.chatClient.sendMsg(Identifier.AddFriend + textin.getText());
+				textin.setText("");
 			}
 		}
 		if(e.getSource() == buildRoom) {
@@ -153,13 +154,14 @@ public class MainPage extends JFrame implements ActionListener {
 					if(e.getSource() == chooseComfirmButton) {
 						int[] index = friendList.getSelectedIndices();
 						//how to know username
-						String roomName = "user";
+						String roomName = "userID";
 						for(int x  : index) {
 							System.out.println(fList.get(x));
 							roomName = roomName.concat(", " + fList.get(x));
 						}
 						messagePage = new MessagePage(roomName);
 			            messagePage.setVisible(true);
+			            rList.addElement(roomName);
 					}
 					
 				}
