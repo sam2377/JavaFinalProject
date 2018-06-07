@@ -111,7 +111,7 @@ public class LogInPage extends JFrame implements ActionListener {
 				chatClient.sendMsg(
 						Identifier.CheckAccount + username.getText().toString() + "," + password.getText().toString());
 			}else {
-				JOptionPane.showMessageDialog(LogInPage.logInPage, "ï¿½ï¿½ì¤£ï¿½à¬°ï¿½ï¿½");
+				JOptionPane.showMessageDialog(LogInPage.logInPage, "Äæ¦ì¤£¯à¬°ªÅ");
 			}
 		}
 		if (e.getSource() == signUp) {
@@ -122,7 +122,7 @@ public class LogInPage extends JFrame implements ActionListener {
 				chatClient.sendMsg(
 						Identifier.CreateAccount + username.getText().toString() + "," + password.getText().toString());
 			}else {
-				JOptionPane.showMessageDialog(LogInPage.logInPage, "ï¿½ï¿½ì¤£ï¿½à¬°ï¿½ï¿½");
+				JOptionPane.showMessageDialog(LogInPage.logInPage, "Äæ¦ì¤£¯à¬°ªÅ");
 			}
 		}
 
