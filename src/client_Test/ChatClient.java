@@ -22,7 +22,7 @@ public class ChatClient extends Thread {
 
 	public ChatClient() {
 		try {
-			socket = new Socket("140.116.111.113", 5050);
+			socket = new Socket("192.168.10.192", 5050);
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 			pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 		} catch (Exception e) {
@@ -50,7 +50,7 @@ public class ChatClient extends Thread {
 	public void reconnect() {
 		System.out.println("reconnect");
 		try {
-			socket = new Socket("140.116.111.113", 5050);
+			socket = new Socket("192.168.10.192", 5050);
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 			pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 		} catch (Exception e) {
@@ -100,10 +100,6 @@ public class ChatClient extends Thread {
 							msg = msg.replace(Identifier.ChatroomData, "");
 							String[] split_line = msg.split(",");
 							chatroom.add(new Chatroom(split_line[0], split_line[1]));
-						}else if(msg.contains(Identifier.RecordData)) {
-							msg = msg.replace(Identifier.RecordData, "");
-							String[] split_line = msg.split(",");
-							record.add(new Record(split_line[0], split_line[1]));
 						}else if(msg.contains(Identifier.StateThree)) {
 							state = 2;
 						}

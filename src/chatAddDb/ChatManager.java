@@ -13,7 +13,7 @@ public class ChatManager {
     public void Sendmessage(ChatSocket socket,String msg){
         for (int i = 0; i < CSList.size(); i++) {
             ChatSocket cs = CSList.get(i);
-            if(socket.hcode.equals(cs.hcode) && socket.hcode!=null && cs.hcode!=null)
+            if(socket.hcode.equals(cs.hcode) && socket.hcode!=null && cs.hcode!=null && !socket.equals(cs))
             	cs.outprint(msg);
         }
     }

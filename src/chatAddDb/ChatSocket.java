@@ -9,6 +9,7 @@ import java.lang.reflect.Array;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class ChatSocket extends Thread {
 
@@ -45,15 +46,15 @@ public class ChatSocket extends Thread {
 			while ((msg = br.readLine()) != null) {
 				System.out.println("server receive:" + msg);
 				if (msg.contains(Identifier.CreateAccount)) {
-					msg = msg.replace(Identifier.CreateAccount,"");
+					msg = msg.replace(Identifier.CreateAccount, "");
 					String[] split_line = msg.split(",");
-					
-					if(dbHandler.register(split_line[0], split_line[1])) {
+
+					if (dbHandler.register(split_line[0], split_line[1])) {
 						outprint(Identifier.CreateAccountS);
-					}else {
+					} else {
 						outprint(Identifier.CreateAccountF);
 					}
- 				} else if (msg.contains(Identifier.CheckAccount)) {
+				} else if (msg.contains(Identifier.CheckAccount)) {
 					msg = msg.replace(Identifier.CheckAccount, "");
 					String[] split_line = msg.split(",");
 
@@ -80,12 +81,47 @@ public class ChatSocket extends Thread {
 					for (int i = 0; i < chatRoom.size(); i++) {
 						outprint(Identifier.ChatroomData + chatRoom.get(i).code + "," + chatRoom.get(i).roomName);
 					}
-					ArrayList<Record> record = dbHandler.getRecord(id);
+					// ArrayList<Record> record = dbHandler.getRecord(id);
+					// for (int i = 0; i < record.size(); i++) {
+					// outprint(Identifier.RecordData + record.get(i).sender + "," +
+					// record.get(i).MSG);
+					// }
+					outprint(Identifier.StateTwo);
+				} else if (msg.contains(Identifier.AddFriend)) {
+					msg = msg.replace(Identifier.AddFriend, "");
+					if (dbHandler.addFriend(id, msg)) {
+						outprint(Identifier.AddFriendS + msg);
+					} else {
+						outprint(Identifier.AddFriendF);
+					}
+				} else if (msg.contains(Identifier.AddGroup)) {
+					ArrayList<String> memberList = new ArrayList<String>();
+					msg = msg.replace(Identifier.AddGroup, "");
+					String[] split_line = msg.split(":");
+					System.out.println("splitline: " + split_line[0] + "," + split_line[1]);
+					StringTokenizer stringTokenizer = new StringTokenizer(split_line[1], ",");
+					while (stringTokenizer.hasMoreTokens()) {
+						memberList.add(stringTokenizer.nextToken());
+						// System.out.println("token:" + stringTokenizer.nextToken());
+					}
+					if (dbHandler.createChatRoom(memberList, split_line[0]) == true) {
+						outprint(Identifier.AddGroupS);
+					} else {
+						outprint(Identifier.AddGroupF);
+					}
+				} else if (msg.contains(Identifier.FetchRecord)) {
+					msg = msg.replace(Identifier.FetchRecord, "");
+					hcode = msg;
+					ArrayList<Record> record = new ArrayList<Record>();
+					record = dbHandler.getRecord(msg);
 					for (int i = 0; i < record.size(); i++) {
 						outprint(Identifier.RecordData + record.get(i).sender + "," + record.get(i).MSG);
 					}
-					outprint(Identifier.StateThree);
+					outprint(Identifier.FetchFinish);
+				} else if (msg.contains(Identifier.QuitChat)) {
+					hcode = "";
 				} else {
+					dbHandler.storeRecord(hcode, id, msg);
 					ServerListener.chatManager.Sendmessage(this, id + ": " + msg);
 				}
 			}

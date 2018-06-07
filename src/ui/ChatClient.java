@@ -10,24 +10,24 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import client_Test.Chatroom;
-import client_Test.Record;
-
 public class ChatClient extends Thread {
 
+	final private String Server_Ip = "140.116.111.113";
+	
 	private String id;
 	private BufferedReader br = null;
 	private PrintWriter pw = null;
 	private Socket socket = null;
-	private ArrayList<String> friendlist = new ArrayList<String>();
-	private ArrayList<Chatroom> chatroom = new ArrayList<Chatroom>();
-	private ArrayList<Record> record = new ArrayList<Record>();
+	static ArrayList<String> friendlist = new ArrayList<String>();
+	static ArrayList<Chatroom> chatroom = new ArrayList<Chatroom>();
+	static ArrayList<Record> record = new ArrayList<Record>();
+
 
 	private volatile int state = 0;
 
 	public ChatClient() {
 		try {
-			socket = new Socket("140.116.111.113", 5050);
+			socket = new Socket(Server_Ip, 5050);
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 			pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 		} catch (Exception e) {
@@ -55,7 +55,7 @@ public class ChatClient extends Thread {
 	public void reconnect() {
 		System.out.println("reconnect");
 		try {
-			socket = new Socket("140.116.111.113", 5050);
+			socket = new Socket(Server_Ip, 5050);
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 			pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 		} catch (Exception e) {
@@ -111,11 +111,11 @@ public class ChatClient extends Thread {
 							msg = msg.replace(Identifier.ChatroomData, "");
 							String[] split_line = msg.split(",");
 							chatroom.add(new Chatroom(split_line[0], split_line[1]));
-						} else if (msg.contains(Identifier.RecordData)) {
-							msg = msg.replace(Identifier.RecordData, "");
-							String[] split_line = msg.split(",");
-							record.add(new Record(split_line[0], split_line[1]));
-						} else if (msg.contains(Identifier.StateThree)) {
+//						} else if (msg.contains(Identifier.RecordData)) {
+//							msg = msg.replace(Identifier.RecordData, "");
+//							String[] split_line = msg.split(",");
+//							record.add(new Record(split_line[0], split_line[1]));
+						} else if (msg.contains(Identifier.StateTwo)) {
 							state = 2;
 						}
 					}
@@ -124,6 +124,34 @@ public class ChatClient extends Thread {
 				}
 				break;
 			case 2:
+				try {
+					if (br.ready()) {
+						msg = br.readLine();
+						System.out.println("msg: " + msg);
+						if(msg.contains(Identifier.AddFriendS)) {
+							JOptionPane.showMessageDialog(LogInPage.mainPage, "加入好友成功");
+							msg = msg.replace(Identifier.AddFriendS, "");
+							friendlist.add(msg);
+							LogInPage.mainPage.refresh();
+						}else if(msg.contains(Identifier.AddFriendF)) {
+							JOptionPane.showMessageDialog(LogInPage.mainPage, "加入好友失敗");
+						}else if(msg.contains(Identifier.AddGroupS)) {
+							JOptionPane.showMessageDialog(LogInPage.mainPage, "創建群組成功");
+						}else if(msg.contains(Identifier.AddGroupF)) {
+							JOptionPane.showMessageDialog(LogInPage.mainPage, "創建群組失敗");
+						}else if(msg.contains(Identifier.RecordData)){
+							msg = msg.replace(Identifier.RecordData,"");
+							String[] split_line = msg.split(",");
+							record.add(new Record(split_line[0], split_line[1]));
+						}else if(msg.contains(Identifier.FetchFinish)) {
+							state = 3;
+						}else {
+							MainPage.chatPage.refresh(msg);
+						}
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
 				break;
 			case 3:
 				break;
@@ -139,16 +167,7 @@ public class ChatClient extends Thread {
 	public String getUserId() {
 		return id;
 	}
-
-	public ArrayList<String> getFriendlist() {
-		return friendlist;
-	}
-
-	public ArrayList<Chatroom> getChatroom() {
-		return chatroom;
-	}
-
-	public ArrayList<Record> getRecord() {
-		return record;
+	public void setstate(int i) {
+		state = i;
 	}
 }
