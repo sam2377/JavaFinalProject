@@ -232,6 +232,7 @@ public class MainPage extends JFrame implements ActionListener {
 						}
 						friendList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 						friendsPanel.add(fScroll, BorderLayout.CENTER);
+						friendList.clearSelection();
 						chooseFriend.dispose();
 					}
 
