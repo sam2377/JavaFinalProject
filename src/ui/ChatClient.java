@@ -10,13 +10,10 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import client_Test.Chatroom;
-import client_Test.Record;
-
 public class ChatClient extends Thread {
 
-	final private String Server_Ip = "192.168.10.192";
-	
+	final private String Server_Ip = "140.116.111.113";
+
 	private String id;
 	private BufferedReader br = null;
 	private PrintWriter pw = null;
@@ -84,10 +81,10 @@ public class ChatClient extends Thread {
 						} else if (msg.equals(Identifier.CreateAccountS)) {
 							JOptionPane.showMessageDialog(LogInPage.logInPage, "帳號建立成功");
 						} else if (msg.equals(Identifier.LoginFailure)) {
-//							System.out.println("LoginFailure");
+							// System.out.println("LoginFailure");
 							JOptionPane.showMessageDialog(LogInPage.logInPage, "登入失敗");
 						} else if (msg.equals(Identifier.LoginSuccess)) {
-//							System.out.println("LoginSuccess");
+							// System.out.println("LoginSuccess");
 							JOptionPane.showMessageDialog(LogInPage.logInPage, "登入成功");
 							sendMsg(Identifier.ID);
 							state = 1;
@@ -113,10 +110,7 @@ public class ChatClient extends Thread {
 							msg = msg.replace(Identifier.ChatroomData, "");
 							String[] split_line = msg.split(",");
 							chatroom.add(new Chatroom(split_line[0], split_line[1]));
-						} else if (msg.contains(Identifier.RecordData)) {
-							msg = msg.replace(Identifier.RecordData, "");
-							String[] split_line = msg.split(",");
-							record.add(new Record(split_line[0], split_line[1]));
+
 						} else if (msg.contains(Identifier.StateTwo)) {
 							state = 2;
 						}
@@ -129,13 +123,26 @@ public class ChatClient extends Thread {
 				try {
 					if (br.ready()) {
 						msg = br.readLine();
-						if(msg.contains(Identifier.AddFriendS)) {
+						System.out.println("msg: " + msg);
+						if (msg.contains(Identifier.AddFriendS)) {
 							JOptionPane.showMessageDialog(LogInPage.mainPage, "加入好友成功");
 							msg = msg.replace(Identifier.AddFriendS, "");
 							friendlist.add(msg);
 							LogInPage.mainPage.refresh();
-						}else if(msg.contains(Identifier.AddFriendF)) {
+						} else if (msg.contains(Identifier.AddFriendF)) {
 							JOptionPane.showMessageDialog(LogInPage.mainPage, "加入好友失敗");
+						} else if (msg.contains(Identifier.AddGroupS)) {
+							JOptionPane.showMessageDialog(LogInPage.mainPage, "加入群組成功");
+						} else if (msg.contains(Identifier.AddGroupF)) {
+							JOptionPane.showMessageDialog(LogInPage.mainPage, "加入群組失敗");
+						} else if (msg.contains(Identifier.RecordData)) {
+							msg = msg.replace(Identifier.RecordData, "");
+							String[] split_line = msg.split(",");
+							record.add(new Record(split_line[0], split_line[1]));
+						} else if (msg.contains(Identifier.FetchFinish)) {
+							state = 3;
+						} else {
+							MainPage.chatPage.refresh(msg);
 						}
 					}
 				} catch (Exception e) {
@@ -155,6 +162,10 @@ public class ChatClient extends Thread {
 
 	public String getUserId() {
 		return id;
+	}
+
+	public void setstate(int i) {
+		state = i;
 	}
 
 }

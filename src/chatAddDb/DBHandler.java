@@ -182,7 +182,7 @@ public class DBHandler {
 		return initInfo;
 	}
 	
-	public void createChatRoom(ArrayList<String> memberList,  String GroupName) {
+	public Boolean createChatRoom(ArrayList<String> memberList,  String GroupName) {
 		Collections.sort(memberList);
 		String string = memberList.get(0);
 		for(int i = 1; i< memberList.size(); ++i) {
@@ -193,7 +193,7 @@ public class DBHandler {
 		}
 		String code = MD5(string);
 		if(codeExist(code)) {
-			return;
+			return false;
 		}
 		
 		try {
@@ -212,6 +212,7 @@ public class DBHandler {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+		return true;
 	}
 	
 	public boolean codeExist(String code) {

@@ -100,10 +100,6 @@ public class ChatClient extends Thread {
 							msg = msg.replace(Identifier.ChatroomData, "");
 							String[] split_line = msg.split(",");
 							chatroom.add(new Chatroom(split_line[0], split_line[1]));
-						}else if(msg.contains(Identifier.RecordData)) {
-							msg = msg.replace(Identifier.RecordData, "");
-							String[] split_line = msg.split(",");
-							record.add(new Record(split_line[0], split_line[1]));
 						}else if(msg.contains(Identifier.StateThree)) {
 							state = 2;
 						}
