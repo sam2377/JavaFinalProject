@@ -22,7 +22,7 @@ public class ChatClient extends Thread {
 
 	public ChatClient() {
 		try {
-			socket = new Socket("192.168.10.192", 5050);
+			socket = new Socket("192.168.52.1", 5050);
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 			pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 		} catch (Exception e) {

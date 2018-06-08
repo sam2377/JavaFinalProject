@@ -68,7 +68,7 @@ public class ChatPage extends JFrame implements ActionListener {
 				MainPage.chatPage.setVisible(false);
 				LogInPage.chatClient.sendMsg(Identifier.QuitChat);
 				System.out.println("close");
-				LogInPage.mainPage.check = true;
+				LogInPage.mainPage.checkChatroomIsOnlyOne = true;
 			}
 		});
 
