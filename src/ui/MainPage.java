@@ -51,7 +51,6 @@ public class MainPage extends JFrame implements ActionListener {
 		setTitle("Main");
 
 		getRootPane().setBorder(new LineBorder(new Color(0, 0, 0, 0), 30));
-
 		pageBlock = new JPanel();
 		buttonBlock = new JPanel();
 		cardLayout = new CardLayout();
@@ -66,65 +65,6 @@ public class MainPage extends JFrame implements ActionListener {
 		buttonBlock.setLayout(new GridLayout(3, 1));
 		buttonBlock.setBackground(Color.black);
 		buttonBlock.setPreferredSize(new Dimension(150, 0));
-		// =======
-		// // pageBlock.add(new Label("friends"), "friends");
-		// pageBlock.add(my_friend, "friends");
-		//
-		// // pageBlock.add(new Label("chatrooms"), "chatrooms");
-		// chatroom_panel.add(scrollPane, BorderLayout.CENTER);
-		// for (int i = 0; i < ChatClient.chatroom.size(); i++) {
-		// JButton jButton = new JButton(ChatClient.chatroom.get(i).roomName);
-		// jButton.putClientProperty("code", ChatClient.chatroom.get(i).code);
-		// chatroom_list_panel.add(jButton);
-		// jButton.addActionListener(new ActionListener() {
-		//
-		// @Override
-		// public void actionPerformed(ActionEvent e) {
-		// // System.out.println(jButton.getClientProperty("code").toString());
-		// if (check == true) {
-		// check = false;
-		// LogInPage.chatClient
-		// .sendMsg(Identifier.FetchRecord +
-		// jButton.getClientProperty("code").toString());
-		// new SwingWorker<NullType, NullType>() {
-		// @Override
-		// protected NullType doInBackground() throws Exception {
-		// while (true) {
-		// if (LogInPage.chatClient.getStage() == 3) {
-		// return null;
-		// }
-		// }
-		// }
-		//
-		// protected void done() {
-		// LogInPage.chatClient.setstate(2);
-		// chatPage = new ChatPage(jButton.getClientProperty("code").toString());
-		// ChatClient.record.clear();
-		// chatPage.setVisible(true);
-		// }
-		//
-		// }.execute();
-		// }
-		// }
-		// });
-		// }
-		// pageBlock.add(chatroom_panel, "chatrooms");
-		//
-		// addfriend_panel.add(adduser);
-		// addfriend_panel.add(adduser_confirm);
-		// adduser_confirm.addActionListener(this);
-		// // pageBlock.add(new Label("settings"), "settings");
-		// pageBlock.add(addfriend_panel, "addfriend");
-		//
-		// addgroup_panel.add(friend_checkbox_panel, BorderLayout.CENTER);
-		// addgroup_confirm.addActionListener(this);
-		// addgroup_panel.add(addgroup_confirm, BorderLayout.SOUTH);
-		// addgroup_panel.add(group_name, BorderLayout.NORTH);
-		//
-		// pageBlock.add(addgroup_panel, "addgroup");
-		// buttonBlock = new JPanel();
-		// buttonBlock.setLayout(new FlowLayout());
-		// >>>>>>> refs/remotes/origin/myBranch
 		friends = new JButton("friends");
 		friends.addActionListener(this);
 		chatRoom = new JButton("chatrooms");
@@ -143,6 +83,7 @@ public class MainPage extends JFrame implements ActionListener {
 		friendList = new JList(fList);
 		fScroll = new JScrollPane(friendList);
 		addFriend.addActionListener(this);
+		// Friend list initialization
 		for (int i = 0; i < ChatClient.friendlist.size(); ++i) {
 			fList.addElement(ChatClient.friendlist.get(i));
 
@@ -154,11 +95,35 @@ public class MainPage extends JFrame implements ActionListener {
 		friendList.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evt) {
 				if (evt.getClickCount() == 2) {
-					// Double-click detected
-					// int index = friendList.locationToIndex(evt.getPoint());
-					// System.out.println("index: "+index);
-					messagePage = new MessagePage(friendList.getSelectedValue().toString());
-					messagePage.setVisible(true);
+					// Double-click detected to a personal chatroom
+					if (checkChatroomIsOnlyOne) {
+						checkChatroomIsOnlyOne = false;
+						for (int i = 0; i < ChatClient.chatroom.size(); ++i) {
+							if (roomList.getSelectedValue().toString().equals(ChatClient.chatroom.get(i).roomName)) {
+								String temp = ChatClient.chatroom.get(i).code;
+								LogInPage.chatClient.sendMsg(Identifier.FetchRecord + temp);
+								new SwingWorker<NullType, NullType>() {
+									@Override
+									protected NullType doInBackground() throws Exception {
+										while (true) {
+											if (LogInPage.chatClient.getStage() == 3) {
+												return null;
+											}
+										}
+									}
+
+									protected void done() {
+										LogInPage.chatClient.setstate(2);
+										chatPage = new ChatPage(temp);
+										ChatClient.record.clear();
+										chatPage.setVisible(true);
+									}
+
+								}.execute();
+							}
+						}
+					}
+
 				}
 			}
 		});
@@ -168,23 +133,54 @@ public class MainPage extends JFrame implements ActionListener {
 		roomList = new JList(rList);
 		rScroll = new JScrollPane(roomList);
 		buildRoom.addActionListener(this);
+		// Chatroom list initialization
+		for (int i = 0; i < ChatClient.chatroom.size(); i++) {
+			rList.addElement(ChatClient.chatroom.get(i).roomName);
+		}
 		roomList.setFixedCellHeight(100);
 		chatroomsPanel.add(buildRoom, BorderLayout.NORTH);
 		chatroomsPanel.add(rScroll, BorderLayout.CENTER);
 		roomList.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evt) {
 				if (evt.getClickCount() == 2) {
-					// Double-click detected
-					messagePage = new MessagePage(roomList.getSelectedValue().toString());
-					messagePage.setVisible(true);
+					// Double-click detected to a chatroom
+					if (checkChatroomIsOnlyOne) {
+						checkChatroomIsOnlyOne = false;
+						for (int i = 0; i < ChatClient.chatroom.size(); ++i) {
+							if (roomList.getSelectedValue().toString().equals(ChatClient.chatroom.get(i).roomName)) {
+								String temp = ChatClient.chatroom.get(i).code;
+								LogInPage.chatClient.sendMsg(Identifier.FetchRecord + temp);
+								new SwingWorker<NullType, NullType>() {
+									@Override
+									protected NullType doInBackground() throws Exception {
+										while (true) {
+											if (LogInPage.chatClient.getStage() == 3) {
+												return null;
+											}
+										}
+									}
+
+									protected void done() {
+										LogInPage.chatClient.setstate(2);
+										chatPage = new ChatPage(temp);
+										ChatClient.record.clear();
+										chatPage.setVisible(true);
+									}
+
+								}.execute();
+							}
+						}
+
+					}
+
 				}
 			}
 		});
 	}
-
+	//Update new info to UI
 	public void refresh() {
 		fList.addElement(ChatClient.friendlist.get(ChatClient.friendlist.size() - 1));
-		rList.addElement(ChatClient.friendlist.get(ChatClient.friendlist.size() - 1));
+		rList.addElement(ChatClient.chatroom.get(ChatClient.chatroom.size() - 1).roomName);
 	}
 
 	@Override
@@ -199,15 +195,17 @@ public class MainPage extends JFrame implements ActionListener {
 		if (e.getSource() == settings) {
 			cardLayout.show(pageBlock, "settings");
 		}
+		// Add a new friend
 		if (e.getSource() == addFriend) {
 			if (!textin.getText().equals("")) {
 				LogInPage.chatClient.sendMsg(Identifier.AddFriend + textin.getText());
 				textin.setText("");
 			}
 		}
+		// Create a new group room
 		if (e.getSource() == buildRoom) {
-			System.out.println("aaaaaaa");
 			JDialog chooseFriend = new JDialog();
+			JTextField roomNameText = new JTextField();
 			chooseComfirmButton = new JButton("OK");
 			friendList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			chooseComfirmButton.addActionListener(new ActionListener() {
@@ -215,16 +213,26 @@ public class MainPage extends JFrame implements ActionListener {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == chooseComfirmButton) {
-						int[] index = friendList.getSelectedIndices();
-						// how to know username
-						String roomName = "userID";
-						for (int x : index) {
-							System.out.println(fList.get(x));
-							roomName = roomName.concat(", " + fList.get(x));
+						boolean nameIsRepeated = false;
+						for (int i = 0; i < ChatClient.chatroom.size(); ++i) {
+							if (roomNameText.getText().trim().equals(ChatClient.chatroom.get(i).roomName))
+								nameIsRepeated = true;
 						}
-						messagePage = new MessagePage(roomName);
-						messagePage.setVisible(true);
-						rList.addElement(roomName);
+						if (!roomNameText.getText().equals("") && !nameIsRepeated) {
+							int[] index = friendList.getSelectedIndices();
+							String msg = roomNameText.getText() + ":" + LogInPage.chatClient.getUserId();
+							for (int x : index) {
+								System.out.println(fList.get(x));
+								msg = msg.concat(", " + fList.get(x));
+							}
+							LogInPage.chatClient.sendMsg(Identifier.AddGroup + msg);
+
+						} else {
+							JOptionPane.showMessageDialog(LogInPage.logInPage, "創建群組失敗");
+						}
+						friendList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+						friendsPanel.add(fScroll, BorderLayout.CENTER);
+						chooseFriend.dispose();
 					}
 
 				}
@@ -233,6 +241,7 @@ public class MainPage extends JFrame implements ActionListener {
 			chooseFriend.setSize(400, 300);
 			chooseFriend.add(fScroll, BorderLayout.CENTER);
 			chooseFriend.add(chooseComfirmButton, BorderLayout.SOUTH);
+			chooseFriend.add(roomNameText, BorderLayout.NORTH);
 			chooseFriend.setVisible(true);
 
 		}
@@ -245,71 +254,6 @@ public class MainPage extends JFrame implements ActionListener {
 	JTextField textin;
 	JList friendList, roomList;
 	JScrollPane fScroll, rScroll;
-	MessagePage messagePage;
-
-	// =======
-	// if (e.getSource() == addfriend) {
-	// cardLayout.show(pageBlock, "addfriend");
-	// }
-	// if (e.getSource() == addgroup) {
-	// cardLayout.show(pageBlock, "addgroup");
-	// }
-	// if (e.getSource() == adduser_confirm) {
-	// if (!adduser.getText().equals("")) {
-	// LogInPage.chatClient.sendMsg(Identifier.AddFriend + adduser.getText());
-	// }
-	// }
-	// if (e.getSource() == addgroup_confirm) {
-	// if (!group_name.getText().equals("")) {
-	// String msg = group_name.getText() + ":" + LogInPage.chatClient.getUserId();
-	// for (int i = 0; i < checkBoxs.size(); i++) {
-	// if (checkBoxs.get(i).isSelected()) {
-	// msg = new
-	// StringBuilder().append(msg).append(",").append(checkBoxs.get(i).getText()).toString();
-	// }
-	// }
-	// LogInPage.chatClient.sendMsg(Identifier.AddGroup + msg);
-	// // System.out.println(Identifier.AddGroup + msg);
-	// } else {
-	// JOptionPane.showMessageDialog(LogInPage.logInPage, "��줣�ର��");
-	// }
-	// }
-	// }
-	//
-	// MessageDialogue mDialogue;
-	// JButton friendA;
-	// JPanel buttonBlock, pageBlock;
-	// JButton friends, chatRoom, addfriend, addgroup;
-	// CardLayout cardLayout;
-	//
-	// JTextArea my_friend;
-	//
-	// JPanel chatroom_panel = new JPanel();
-	// JPanel chatroom_list_panel = new JPanel(new GridLayout(0, 10));
-	// JScrollPane scrollPane = new JScrollPane(chatroom_list_panel,
-	// JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-	// JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	static ChatPage chatPage;
-	//
-	// JTextField adduser = new JTextField();
-	// JButton adduser_confirm = new JButton("�[�J");
-	// JPanel addfriend_panel = new JPanel(new GridLayout());
-	//
-	// JButton addgroup_confirm = new JButton("�Ыظs��");
-	// JTextField group_name = new JTextField();
-	// JPanel addgroup_panel = new JPanel(new BorderLayout());
-	// JPanel friend_checkbox_panel = new JPanel();
-	// ArrayList<JCheckBox> checkBoxs = new ArrayList<JCheckBox>();
-	//
-	Boolean check = true;
-	//
-	// public void refresh() {
-	// my_friend.append(ChatClient.friendlist.get(ChatClient.friendlist.size() - 1)
-	// + "\n");
-	// JCheckBox checkbox = new
-	// JCheckBox(ChatClient.friendlist.get(ChatClient.friendlist.size() - 1));
-	// checkBoxs.add(checkbox);
-	// friend_checkbox_panel.add(checkbox);
-	// }
-	// >>>>>>> refs/remotes/origin/myBranch
+	Boolean checkChatroomIsOnlyOne = true;
 }
