@@ -158,7 +158,7 @@ public class DBHandler {
 		return friendList;
 	}
 	
-	public ArrayList<ChatRoom> getInitInfo(String user) {
+	public ArrayList<ChatRoom> getInitInfo(String user, boolean flag) {
 		ArrayList<ChatRoom> initInfo = new ArrayList<>();
 		try {
 			ArrayList<String> friendList = this.getFriendList(user);
@@ -172,12 +172,15 @@ public class DBHandler {
 				String code = MD5(string);
 				initInfo.add(new ChatRoom(code, friend));
 			}
-			PreparedStatement statement = conn.prepareStatement("SELECT code, GroupName FROM RoomMap WHERE GroupName IS NOT NULL AND member = ?");
-			statement.setString(1, user);
-			statement.executeQuery();
-			ResultSet resultSet = statement.getResultSet();
-			while(resultSet.next()) {
-				initInfo.add(new ChatRoom(resultSet.getString("code"), resultSet.getString("GroupName")));
+			
+			if(flag) {
+				PreparedStatement statement = conn.prepareStatement("SELECT code, GroupName FROM RoomMap WHERE GroupName IS NOT NULL AND member = ?");
+				statement.setString(1, user);
+				statement.executeQuery();
+				ResultSet resultSet = statement.getResultSet();
+				while(resultSet.next()) {
+					initInfo.add(new ChatRoom(resultSet.getString("code"), resultSet.getString("GroupName")));
+				}
 			}
 		}catch (Exception e) {
 			// TODO: handle exception

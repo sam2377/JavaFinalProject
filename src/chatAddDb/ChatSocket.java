@@ -77,7 +77,7 @@ public class ChatSocket extends Thread {
 					for (int i = 0; i < friendlist.size(); i++) {
 						outprint(Identifier.FriendData + friendlist.get(i));
 					}
-					ArrayList<ChatRoom> chatRoom = dbHandler.getInitInfo(id);
+					ArrayList<ChatRoom> chatRoom = dbHandler.getInitInfo(id,true);
 					for (int i = 0; i < chatRoom.size(); i++) {
 						outprint(Identifier.ChatroomData + chatRoom.get(i).code + "," + chatRoom.get(i).roomName);
 					}
@@ -85,7 +85,7 @@ public class ChatSocket extends Thread {
 				} else if (msg.contains(Identifier.AddFriend)) {
 					msg = msg.replace(Identifier.AddFriend, "");
 					if (dbHandler.addFriend(id, msg)) {
-						ArrayList<ChatRoom> chatRoom = dbHandler.getInitInfo(id);
+						ArrayList<ChatRoom> chatRoom = dbHandler.getInitInfo(id,false);
 						System.out.println(chatRoom.get(chatRoom.size()-1).code + "," + chatRoom.get(chatRoom.size()-1).roomName);
 //						outprint(Identifier.AddFriendS + chatRoom.get(chatRoom.size()-1).code + "," + chatRoom.get(chatRoom.size()-1).roomName);
 					} else {
@@ -102,7 +102,7 @@ public class ChatSocket extends Thread {
 						// System.out.println("token:" + stringTokenizer.nextToken());
 					}
 					if (dbHandler.createChatRoom(memberList, split_line[0]) == true) {
-						ArrayList<ChatRoom> chatRoom = dbHandler.getInitInfo(id);
+						ArrayList<ChatRoom> chatRoom = dbHandler.getInitInfo(id,true);
 						outprint(Identifier.AddGroupS + chatRoom.get(chatRoom.size()-1).code + "," + chatRoom.get(chatRoom.size()-1).roomName);
 					} else {
 						outprint(Identifier.AddGroupF);

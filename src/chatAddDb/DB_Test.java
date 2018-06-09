@@ -19,7 +19,7 @@ public class DB_Test {
 			arrayList.add("ddd");
 			//arrayList.add("ccc");
 			
-			ArrayList<ChatRoom> chatRooms = dbHandler.getInitInfo("ccc");
+			ArrayList<ChatRoom> chatRooms = dbHandler.getInitInfo("ccc",true);
 			for (ChatRoom chatRoom : chatRooms) {
 				System.out.println(chatRoom.code + "  " + chatRoom.roomName);
 			}
