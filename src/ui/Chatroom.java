@@ -8,4 +8,7 @@ public class Chatroom {
 		this.code = code;
 		this.roomName = roomName;
 	}
+	public String toString(){
+		return code;
+	}
 }

@@ -64,9 +64,9 @@ public class ChatSocket extends Thread {
 					} else {
 						outprint(Identifier.LoginFailure);
 					}
-					System.out.println("�{�b�ϥΪ̭Ӽ�: " + ChatManager.CSList.size());
+					System.out.println("現在使用者個數: " + ChatManager.CSList.size());
 					for (int i = 0; i < ChatManager.CSList.size(); i++) {
-						System.out.printf("�ϥΪ�%d IP Address: %s, ID: %s\n", i + 1,
+						System.out.printf("使用者%d IP Address: %s, ID: %s\n", i + 1,
 								ChatManager.CSList.get(i).socket.getInetAddress().toString(),
 								ChatManager.CSList.get(i).id);
 					}
@@ -81,11 +81,6 @@ public class ChatSocket extends Thread {
 					for (int i = 0; i < chatRoom.size(); i++) {
 						outprint(Identifier.ChatroomData + chatRoom.get(i).code + "," + chatRoom.get(i).roomName);
 					}
-					// ArrayList<Record> record = dbHandler.getRecord(id);
-					// for (int i = 0; i < record.size(); i++) {
-					// outprint(Identifier.RecordData + record.get(i).sender + "," +
-					// record.get(i).MSG);
-					// }
 					outprint(Identifier.StateTwo);
 				} else if (msg.contains(Identifier.AddFriend)) {
 					msg = msg.replace(Identifier.AddFriend, "");
@@ -105,7 +100,8 @@ public class ChatSocket extends Thread {
 						// System.out.println("token:" + stringTokenizer.nextToken());
 					}
 					if (dbHandler.createChatRoom(memberList, split_line[0]) == true) {
-						outprint(Identifier.AddGroupS);
+						ArrayList<ChatRoom> chatRoom = dbHandler.getInitInfo(id);
+						outprint(Identifier.AddGroupS + chatRoom.get(chatRoom.size()-1).code + "," + chatRoom.get(chatRoom.size()-1).roomName);
 					} else {
 						outprint(Identifier.AddGroupF);
 					}
@@ -117,8 +113,6 @@ public class ChatSocket extends Thread {
 					for (int i = 0; i < record.size(); i++) {
 						outprint(Identifier.RecordData + record.get(i).sender + "," + record.get(i).MSG);
 					}
-
-
 
 					outprint(Identifier.FetchFinish);
 				} else if (msg.contains(Identifier.QuitChat)) {
@@ -137,9 +131,9 @@ public class ChatSocket extends Thread {
 
 		} finally {
 			ChatManager.CSList.remove(this);
-			System.out.println("�{�b�ϥΪ̭Ӽ�: " + ChatManager.CSList.size());
+			System.out.println("現在使用者個數: " + ChatManager.CSList.size());
 			for (int i = 0; i < ChatManager.CSList.size(); i++) {
-				System.out.printf("�ϥΪ�%d IP Address: %s, ID: %s\n", i + 1,
+				System.out.printf("使用者%d IP Address: %s, ID: %s\n", i + 1,
 						ChatManager.CSList.get(i).socket.getInetAddress().toString(), ChatManager.CSList.get(i).id);
 			}
 		}

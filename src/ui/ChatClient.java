@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 public class ChatClient extends Thread {
 
-	final private String Server_Ip = "192.168.0.104";
+	final private String Server_Ip = "140.116.111.113";
 
 	private String id;
 	private BufferedReader br = null;
@@ -128,13 +128,17 @@ public class ChatClient extends Thread {
 							JOptionPane.showMessageDialog(LogInPage.mainPage, "加入好友成功");
 							msg = msg.replace(Identifier.AddFriendS, "");
 							friendlist.add(msg);
-							LogInPage.mainPage.refresh();
+							LogInPage.mainPage.refreshFriend();
 						} else if (msg.contains(Identifier.AddFriendF)) {
 							JOptionPane.showMessageDialog(LogInPage.mainPage, "加入好友失敗");
 						} else if (msg.contains(Identifier.AddGroupS)) {
-							JOptionPane.showMessageDialog(LogInPage.mainPage, "加入群組成功");
+							JOptionPane.showMessageDialog(LogInPage.mainPage, "創建群組成功");
+							msg = msg.replace(Identifier.AddGroupS, "");
+							String[] split_line = msg.split(",");
+							chatroom.add(new Chatroom(split_line[0], split_line[1]));
+							LogInPage.mainPage.refreshRoom();
 						} else if (msg.contains(Identifier.AddGroupF)) {
-							JOptionPane.showMessageDialog(LogInPage.mainPage, "加入群組失敗");
+							JOptionPane.showMessageDialog(LogInPage.mainPage, "創建群組失敗");
 						} else if (msg.contains(Identifier.RecordData)) {
 							msg = msg.replace(Identifier.RecordData, "");
 							String[] split_line = msg.split(",");

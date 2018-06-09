@@ -129,11 +129,15 @@ public class DBHandler {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
+			ArrayList<String> arrayList = new ArrayList<>();
+			arrayList.add(user);
+			arrayList.add(friend);
+			if(createChatRoom(arrayList, null)) {
+				result = true;
+			}else {
+				result = false;
+			}
 		}
-		ArrayList<String> arrayList = new ArrayList<>();
-		arrayList.add(user);
-		arrayList.add(friend);
-		createChatRoom(arrayList, null);
 		return result;
 	}
 	

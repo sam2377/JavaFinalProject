@@ -16,7 +16,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Map;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -38,9 +40,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
-
-import client_Test.Chatroom;
-import client_Test.Record;
 
 public class MainPage extends JFrame implements ActionListener {
 
@@ -86,56 +85,21 @@ public class MainPage extends JFrame implements ActionListener {
 		// Friend list initialization
 		for (int i = 0; i < ChatClient.friendlist.size(); ++i) {
 			fList.addElement(ChatClient.friendlist.get(i));
-
 		}
 		friendList.setFixedCellHeight(100);
 		friendsPanel.add(addFriend, BorderLayout.SOUTH);
 		friendsPanel.add(textin, BorderLayout.NORTH);
 		friendsPanel.add(fScroll, BorderLayout.CENTER);
-		friendList.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent evt) {
-				if (evt.getClickCount() == 2) {
-					// Double-click detected to a personal chatroom
-					if (checkChatroomIsOnlyOne) {
-						checkChatroomIsOnlyOne = false;
-						for (int i = 0; i < ChatClient.chatroom.size(); ++i) {
-							if (roomList.getSelectedValue().toString().equals(ChatClient.chatroom.get(i).roomName)) {
-								String temp = ChatClient.chatroom.get(i).code;
-								LogInPage.chatClient.sendMsg(Identifier.FetchRecord + temp);
-								new SwingWorker<NullType, NullType>() {
-									@Override
-									protected NullType doInBackground() throws Exception {
-										while (true) {
-											if (LogInPage.chatClient.getStage() == 3) {
-												return null;
-											}
-										}
-									}
-
-									protected void done() {
-										LogInPage.chatClient.setstate(2);
-										chatPage = new ChatPage(temp);
-										ChatClient.record.clear();
-										chatPage.setVisible(true);
-									}
-
-								}.execute();
-							}
-						}
-					}
-
-				}
-			}
-		});
 
 		buildRoom = new JButton("Build");
 		rList = new DefaultListModel();
 		roomList = new JList(rList);
+		roomList.setCellRenderer(new ChatCellRenderer());
 		rScroll = new JScrollPane(roomList);
 		buildRoom.addActionListener(this);
 		// Chatroom list initialization
 		for (int i = 0; i < ChatClient.chatroom.size(); i++) {
-			rList.addElement(ChatClient.chatroom.get(i).roomName);
+			rList.addElement(ChatClient.chatroom.get(i));
 		}
 		roomList.setFixedCellHeight(100);
 		chatroomsPanel.add(buildRoom, BorderLayout.NORTH);
@@ -147,7 +111,7 @@ public class MainPage extends JFrame implements ActionListener {
 					if (checkChatroomIsOnlyOne) {
 						checkChatroomIsOnlyOne = false;
 						for (int i = 0; i < ChatClient.chatroom.size(); ++i) {
-							if (roomList.getSelectedValue().toString().equals(ChatClient.chatroom.get(i).roomName)) {
+							if (roomList.getSelectedValue().toString().equals(ChatClient.chatroom.get(i).code)) {
 								String temp = ChatClient.chatroom.get(i).code;
 								LogInPage.chatClient.sendMsg(Identifier.FetchRecord + temp);
 								new SwingWorker<NullType, NullType>() {
@@ -177,10 +141,15 @@ public class MainPage extends JFrame implements ActionListener {
 			}
 		});
 	}
-	//Update new info to UI
-	public void refresh() {
+
+	// Update new info to UI
+	public void refreshFriend() {
 		fList.addElement(ChatClient.friendlist.get(ChatClient.friendlist.size() - 1));
-		rList.addElement(ChatClient.chatroom.get(ChatClient.chatroom.size() - 1).roomName);
+		// rList.addElement(ChatClient.chatroom.get(ChatClient.chatroom.size() - 1));
+	}
+
+	public void refreshRoom() {
+		rList.addElement(ChatClient.chatroom.get(ChatClient.chatroom.size() - 1));
 	}
 
 	@Override
@@ -213,22 +182,17 @@ public class MainPage extends JFrame implements ActionListener {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == chooseComfirmButton) {
-						boolean nameIsRepeated = false;
-						for (int i = 0; i < ChatClient.chatroom.size(); ++i) {
-							if (roomNameText.getText().trim().equals(ChatClient.chatroom.get(i).roomName))
-								nameIsRepeated = true;
-						}
-						if (!roomNameText.getText().equals("") && !nameIsRepeated) {
+						if (!roomNameText.getText().equals("")) {
 							int[] index = friendList.getSelectedIndices();
 							String msg = roomNameText.getText() + ":" + LogInPage.chatClient.getUserId();
 							for (int x : index) {
-								System.out.println(fList.get(x));
-								msg = msg.concat(", " + fList.get(x));
+								msg = msg.concat("," + fList.get(x));
 							}
-							LogInPage.chatClient.sendMsg(Identifier.AddGroup + msg);
+							 LogInPage.chatClient.sendMsg(Identifier.AddGroup + msg);
+							// System.out.println(msg);
 
 						} else {
-							JOptionPane.showMessageDialog(LogInPage.logInPage, "創建群組失敗");
+							JOptionPane.showMessageDialog(LogInPage.logInPage, "欄位不能為空");
 						}
 						friendList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 						friendsPanel.add(fScroll, BorderLayout.CENTER);
@@ -251,7 +215,8 @@ public class MainPage extends JFrame implements ActionListener {
 	JPanel buttonBlock, pageBlock, friendsPanel, chatroomsPanel;
 	JButton friends, chatRoom, settings, addFriend, buildRoom, chooseComfirmButton;
 	CardLayout cardLayout;
-	DefaultListModel<String> fList, rList;
+	DefaultListModel<String> fList;
+	DefaultListModel<Chatroom> rList;
 	JTextField textin;
 	JList friendList, roomList;
 	JScrollPane fScroll, rScroll;

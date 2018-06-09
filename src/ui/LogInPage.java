@@ -111,7 +111,7 @@ public class LogInPage extends JFrame implements ActionListener {
 				chatClient.sendMsg(
 						Identifier.CheckAccount + username.getText().toString() + "," + password.getText().toString());
 			}else {
-				JOptionPane.showMessageDialog(LogInPage.logInPage, "��줣�ର��");
+				JOptionPane.showMessageDialog(LogInPage.logInPage, "欄位不能為空");
 			}
 		}
 		if (e.getSource() == signUp) {
@@ -122,7 +122,7 @@ public class LogInPage extends JFrame implements ActionListener {
 				chatClient.sendMsg(
 						Identifier.CreateAccount + username.getText().toString() + "," + password.getText().toString());
 			}else {
-				JOptionPane.showMessageDialog(LogInPage.logInPage, "��줣�ର��");
+				JOptionPane.showMessageDialog(LogInPage.logInPage, "欄位不能為空");
 			}
 		}
 
