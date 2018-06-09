@@ -127,7 +127,10 @@ public class ChatClient extends Thread {
 						if (msg.contains(Identifier.AddFriendS)) {
 							JOptionPane.showMessageDialog(LogInPage.mainPage, "加入好友成功");
 							msg = msg.replace(Identifier.AddFriendS, "");
-							friendlist.add(msg);
+							String[] split_line = msg.split(",");
+							chatroom.add(new Chatroom(split_line[0], split_line[1]));
+							LogInPage.mainPage.refreshRoom();
+							friendlist.add(split_line[1]);
 							LogInPage.mainPage.refreshFriend();
 						} else if (msg.contains(Identifier.AddFriendF)) {
 							JOptionPane.showMessageDialog(LogInPage.mainPage, "加入好友失敗");
