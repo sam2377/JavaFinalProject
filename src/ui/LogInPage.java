@@ -14,6 +14,10 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+
+import javax.swing.UIManager.*; /* for nimbus look and feel */
+
+
 public class LogInPage extends JFrame implements ActionListener {
 
 	static LogInPage logInPage;
@@ -28,6 +32,18 @@ public class LogInPage extends JFrame implements ActionListener {
 	// master commit
 
 	public static void main(String[] args) {
+		
+		
+		try {
+    			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+        			if ("Nimbus".equals(info.getName())) {
+            			UIManager.setLookAndFeel(info.getClassName());
+            			break;
+        			}
+    			}
+		} catch (Exception e) {} /* set up nimbus look and feel */
+		
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
