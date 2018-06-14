@@ -1,5 +1,7 @@
 package ui;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -8,13 +10,13 @@ import java.awt.event.FocusListener;
 import javax.lang.model.type.NullType;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-
-
+import javax.swing.UIManager;
 import javax.swing.UIManager.*; /* for nimbus look and feel */
 
 
@@ -26,6 +28,7 @@ public class LogInPage extends JFrame implements ActionListener {
 
 	private JTextField username = null;
 	private JTextField password = null;
+	private JLabel icon = null;
 
 	private String id;
 
@@ -60,34 +63,79 @@ public class LogInPage extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(null);
 		setTitle("Log In");
+		
+		icon = new JLabel("CHAT BOX");
+		icon.setFont(new java.awt.Font("CHAT BOX", 1 , 50));
+		icon.setLocation(265, 100);
+		icon.setSize(400, 100);
+		add(icon);
+		
 		username = new JTextField("<Your Username>");
+		username.setForeground(new java.awt.Color(204, 204, 204));
 		username.setHorizontalAlignment(SwingConstants.CENTER);
 		username.setLocation(300, 200);
 		username.setSize(200, 50);
-		// input.setText("<Input your name here>");
+
 		add(username);
 		password = new JTextField("<Your Password>");
+		password.setForeground(new java.awt.Color(204, 204, 204));
 		password.setHorizontalAlignment(SwingConstants.CENTER);
 		password.setLocation(300, 250);
 		password.setSize(200, 50);
 		add(password);
 		
-		username.addFocusListener(new FocusListener() {
-			public void focusLost(FocusEvent e) {
-
-			}
-			public void focusGained(FocusEvent e) {
-				username.setText("");
-			}
-		});
-		password.addFocusListener(new FocusListener() {
-			public void focusLost(FocusEvent e) {
-	
-			}
-			public void focusGained(FocusEvent e) {
-				password.setText("");
-			}
-		});
+		username.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if(username.getForeground()!= Color.BLACK){
+                    if(username.getText().equals("<Your Username>")){
+                        username.setText("");
+                    }
+                }
+                username.setForeground(Color.BLACK);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+            	if(username.getText().isEmpty()==true){
+                    username.setText("<Your Username>");
+                    username.setCaretPosition(0);
+                    username.setForeground(new java.awt.Color(204,204,204));
+                }
+            }
+        });
+		password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if(password.getForeground()!= Color.BLACK){
+                    if(password.getText().equals("<Your Password>")){
+                        password.setText("");
+                    }
+                }
+                password.setForeground(Color.BLACK);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+            	if(password.getText().isEmpty()==true){
+                    password.setText("<Your Password>");
+                    password.setCaretPosition(0);
+                    password.setForeground(new java.awt.Color(204,204,204));
+                }
+            }
+        });
+		
+		
+//		username.addFocusListener(new FocusListener() {
+//			public void focusLost(FocusEvent e) {
+//
+//			}
+//			public void focusGained(FocusEvent e) {
+//				username.setText("");
+//			}
+//		});
+//		password.addFocusListener(new FocusListener() {
+//			public void focusLost(FocusEvent e) {
+//	
+//			}
+//			public void focusGained(FocusEvent e) {
+//				password.setText("");
+//			}
+//		});
 
 		logIn = new JButton("Log In");
 		logIn.setLocation(350, 300);
@@ -131,9 +179,7 @@ public class LogInPage extends JFrame implements ActionListener {
 			}
 		}
 		if (e.getSource() == signUp) {
-			// SignUpPage signUpPage = new SignUpPage();
-			// signUpPage.setVisible(true);
-			// setVisible(false);
+
 			if (!username.getText().equals("") && !password.getText().equals("")) {
 				chatClient.sendMsg(
 						Identifier.CreateAccount + username.getText().toString() + "," + password.getText().toString());

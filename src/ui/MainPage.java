@@ -77,7 +77,25 @@ public class MainPage extends JFrame implements ActionListener {
 		add(buttonBlock, BorderLayout.WEST);
 
 		addFriend = new JButton("Add");
-		textin = new JTextField();
+		textin = new JTextField("<Type Friend's Name Here>");
+		textin.setForeground(new java.awt.Color(204, 204, 204));
+		textin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if(textin.getForeground()!= Color.BLACK){
+                    if(textin.getText().equals("<Type Friend's Name Here>")){
+                        textin.setText("");
+                    }
+                }
+                textin.setForeground(Color.BLACK);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+            	if(textin.getText().isEmpty()==true){
+                    textin.setText("<Type Friend's Name Here>");
+                    textin.setCaretPosition(0);
+                    textin.setForeground(new java.awt.Color(204,204,204));
+                }
+            }
+        });
 		fList = new DefaultListModel();
 		friendList = new JList(fList);
 		fScroll = new JScrollPane(friendList);
@@ -174,7 +192,25 @@ public class MainPage extends JFrame implements ActionListener {
 		// Create a new group room
 		if (e.getSource() == buildRoom) {
 			JDialog chooseFriend = new JDialog();
-			JTextField roomNameText = new JTextField();
+			JTextField roomNameText = new JTextField("<Type Your Room Name>");
+			roomNameText.setForeground(new java.awt.Color(204, 204, 204));
+			roomNameText.addKeyListener(new java.awt.event.KeyAdapter() {
+	            public void keyPressed(java.awt.event.KeyEvent evt) {
+	                if(roomNameText.getForeground()!= Color.BLACK){
+	                    if(roomNameText.getText().equals("<Type Your Room Name>")){
+	                        roomNameText.setText("");
+	                    }
+	                }
+	                roomNameText.setForeground(Color.BLACK);
+	            }
+	            public void keyReleased(java.awt.event.KeyEvent evt) {
+	            	if(roomNameText.getText().isEmpty()==true){
+	                    roomNameText.setText("<Type Your Room Name>");
+	                    roomNameText.setCaretPosition(0);
+	                    roomNameText.setForeground(new java.awt.Color(204,204,204));
+	                }
+	            }
+	        });
 			chooseComfirmButton = new JButton("OK");
 			friendList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			chooseComfirmButton.addActionListener(new ActionListener() {
